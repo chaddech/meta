@@ -20,6 +20,8 @@ from wideresnet import WideResNet
 # used for logging to TensorBoard
 from tensorboard_logger import configure, log_value
 
+PATH = 'C:/Users/Roop Pal/workspace/meta' #'/media/chad/nara/'
+
 parser = argparse.ArgumentParser(description='PyTorch WideResNet Training')
 parser.add_argument('--dataset', default='cifar10', type=str,
                     help='dataset (cifar10 [default] or cifar100)')
@@ -56,8 +58,6 @@ parser.set_defaults(augment=True)
 best_prec1 = 0
 CUDA_DEVICE = 'cuda:0'
 torch.cuda.set_device(0)
-
-
 
 #Lists to hold the intermediate outputs captured by hooks
 final_fc_pre_hook_list = []
@@ -101,10 +101,10 @@ def main():
     assert(args.dataset == 'cifar10' or args.dataset == 'cifar100')
 
 
-    valid_indices = np.load('flat_valid_of_valid_indices.npy')
-    train_indices = np.load('flat_train_of_valid_indices.npy')
+    valid_indices = np.load('underlying_train_indices.npy')
+    train_indices = np.load('underlying_valid_indices_ie_meta_train_indices.npy')
 
-    full_dataset = datasets.CIFAR100('../data', train = True, transform = transform_test)
+    full_dataset = datasets.CIFAR100('../data', train = True, transform = transform_test, download=True)
 
     train_dataset = torch.utils.data.Subset(full_dataset, train_indices)
     valid_dataset = torch.utils.data.Subset(full_dataset, valid_indices)
@@ -242,23 +242,23 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
         correct_final_fc_pre_hooks = final_fc_pre_hook_list[0][where_which_correct]
         incorrect_final_fc_pre_hooks = final_fc_pre_hook_list[0][where_which_incorrect]
 
-        torch.save(correct_outputs, '/media/chad/nara/cifar/wide/valid/output/correct/correct_output'+str(i)+'.torch')
-        torch.save(incorrect_outputs, '/media/chad/nara/cifar/wide/valid/output/incorrect/incorrect_output'+str(i)+'.torch')
+        torch.save(correct_outputs, PATH + 'cifar/wide/valid/output/correct/correct_output'+str(i)+'.torch')
+        torch.save(incorrect_outputs, PATH + 'cifar/wide/valid/output/incorrect/incorrect_output'+str(i)+'.torch')
 
-        torch.save(correct_penultimate_conv_hooks, '/media/chad/nara/cifar/wide/valid/penultimate_conv_layer/correct/correct_inter_output'+str(i)+'.torch')
-        torch.save(incorrect_penultimate_conv_hooks, '/media/chad/nara/cifar/wide/valid/penultimate_conv_layer/incorrect/incorrect_inter_output'+str(i)+'.torch')
+        torch.save(correct_penultimate_conv_hooks, PATH + 'cifar/wide/valid/penultimate_conv_layer/correct/correct_inter_output'+str(i)+'.torch')
+        torch.save(incorrect_penultimate_conv_hooks, PATH + 'cifar/wide/valid/penultimate_conv_layer/incorrect/incorrect_inter_output'+str(i)+'.torch')
 
-        torch.save(correct_last_conv_hooks, '/media/chad/nara/cifar/wide/valid/last_conv_layer/correct/correct_inter_output'+str(i)+'.torch')
-        torch.save(incorrect_last_conv_hooks, '/media/chad/nara/cifar/wide/valid/last_conv_layer/incorrect/incorrect_inter_output'+str(i)+'.torch')
+        torch.save(correct_last_conv_hooks, PATH + 'cifar/wide/valid/last_conv_layer/correct/correct_inter_output'+str(i)+'.torch')
+        torch.save(incorrect_last_conv_hooks, PATH + 'cifar/wide/valid/last_conv_layer/incorrect/incorrect_inter_output'+str(i)+'.torch')
 
-        torch.save(correct_pre_bn_hooks, '/media/chad/nara/cifar/wide/valid/pre_bn_layer/correct/correct_inter_output'+str(i)+'.torch')
-        torch.save(incorrect_pre_bn_hooks, '/media/chad/nara/cifar/wide/valid/pre_bn_layer/incorrect/incorrect_inter_output'+str(i)+'.torch')
+        torch.save(correct_pre_bn_hooks, PATH + 'cifar/wide/valid/pre_bn_layer/correct/correct_inter_output'+str(i)+'.torch')
+        torch.save(incorrect_pre_bn_hooks, PATH + 'cifar/wide/valid/pre_bn_layer/incorrect/incorrect_inter_output'+str(i)+'.torch')
 
-        torch.save(correct_post_bn_hooks, '/media/chad/nara/cifar/wide/valid/post_bn_layer/correct/correct_inter_output'+str(i)+'.torch')
-        torch.save(incorrect_post_bn_hooks, '/media/chad/nara/cifar/wide/valid/post_bn_layer/incorrect/incorrect_inter_output'+str(i)+'.torch')
+        torch.save(correct_post_bn_hooks, PATH + 'cifar/wide/valid/post_bn_layer/correct/correct_inter_output'+str(i)+'.torch')
+        torch.save(incorrect_post_bn_hooks, PATH + 'cifar/wide/valid/post_bn_layer/incorrect/incorrect_inter_output'+str(i)+'.torch')
 
-        torch.save(correct_final_fc_pre_hooks, '/media/chad/nara/cifar/wide/valid/pre_final_fc_layer/correct/correct_inter_output'+str(i)+'.torch')
-        torch.save(incorrect_final_fc_pre_hooks, '/media/chad/nara/cifar/wide/valid/pre_final_fc_layer/incorrect/incorrect_inter_output'+str(i)+'.torch')
+        torch.save(correct_final_fc_pre_hooks, PATH + 'cifar/wide/valid/pre_final_fc_layer/correct/correct_inter_output'+str(i)+'.torch')
+        torch.save(incorrect_final_fc_pre_hooks, PATH + 'cifar/wide/valid/pre_final_fc_layer/incorrect/incorrect_inter_output'+str(i)+'.torch')
 
         #clear hook lists
         penultimate_conv_hook_list[:] = []

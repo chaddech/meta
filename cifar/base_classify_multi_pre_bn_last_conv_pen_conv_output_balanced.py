@@ -11,6 +11,8 @@ import sys
 from shutil import copyfile
 import datetime
 
+PATH = '/media/chad/nara/'
+
 #os.environ["CUDA_VISIBLE_DEVICES"]="2"
 CUDA_DEVICE = 'cuda:0'
 torch.cuda.set_device(0)
@@ -19,7 +21,7 @@ validation_percentage = .2
 
 #make a folder to house results
 
-results_folder = '/media/chad/nara/meta/cifar/results/'+str(sys.argv[0])+str(datetime.datetime.now())+'/'
+results_folder = PATH + 'meta/cifar/results/'+str(sys.argv[0])+str(datetime.datetime.now())+'/'
 os.mkdir(results_folder)
 copyfile(sys.argv[0], results_folder + sys.argv[0])
 accuracies_file_name = results_folder+sys.argv[0]+'_accuracies_record.txt'
@@ -30,30 +32,30 @@ accuracies_file.close()
 
 
 
-outputs_correct_train_file = '/media/chad/nara/cifar/wide/train/output/correct_outputs.torch'
-outputs_error_train_file = '/media/chad/nara/cifar/wide/train/output/incorrect_outputs.torch'
+outputs_correct_train_file = PATH + 'cifar/wide/train/output/correct_outputs.torch'
+outputs_error_train_file = PATH + 'cifar/wide/train/output/incorrect_outputs.torch'
 
-outputs_correct_valid_file = '/media/chad/nara/cifar/wide/valid/output/correct_outputs.torch'
-outputs_error_valid_file = '/media/chad/nara/cifar/wide/valid/output/incorrect_outputs.torch'
+outputs_correct_valid_file = PATH + 'cifar/wide/valid/output/correct_outputs.torch'
+outputs_error_valid_file = PATH + 'cifar/wide/valid/output/incorrect_outputs.torch'
 
-pre_bn_layer_correct_train_file = '/media/chad/nara/cifar/wide/train/pre_bn_layer/correct_outputs.torch'
-pre_bn_layer_error_train_file = '/media/chad/nara/cifar/wide/train/pre_bn_layer/incorrect_outputs.torch'
+pre_bn_layer_correct_train_file = PATH + 'cifar/wide/train/pre_bn_layer/correct_outputs.torch'
+pre_bn_layer_error_train_file = PATH + 'cifar/wide/train/pre_bn_layer/incorrect_outputs.torch'
 
-pre_bn_layer_correct_valid_file = '/media/chad/nara/cifar/wide/valid/pre_bn_layer/correct_outputs.torch'
-pre_bn_layer_error_valid_file = '/media/chad/nara/cifar/wide/valid/pre_bn_layer/incorrect_outputs.torch'
+pre_bn_layer_correct_valid_file = PATH + 'cifar/wide/valid/pre_bn_layer/correct_outputs.torch'
+pre_bn_layer_error_valid_file = PATH + 'cifar/wide/valid/pre_bn_layer/incorrect_outputs.torch'
 
 
-last_conv_correct_train_file = '/media/chad/nara/cifar/wide/train/last_conv_layer/correct_outputs.torch'
-last_conv_error_train_file = '/media/chad/nara/cifar/wide/train/last_conv_layer/incorrect_outputs.torch'
+last_conv_correct_train_file = PATH + 'cifar/wide/train/last_conv_layer/correct_outputs.torch'
+last_conv_error_train_file = PATH + 'cifar/wide/train/last_conv_layer/incorrect_outputs.torch'
 
-last_conv_correct_valid_file = '/media/chad/nara/cifar/wide/valid/last_conv_layer/correct_outputs.torch'
-last_conv_error_valid_file = '/media/chad/nara/cifar/wide/valid/last_conv_layer/incorrect_outputs.torch'
+last_conv_correct_valid_file = PATH + 'cifar/wide/valid/last_conv_layer/correct_outputs.torch'
+last_conv_error_valid_file = PATH + 'cifar/wide/valid/last_conv_layer/incorrect_outputs.torch'
 
-pen_conv_correct_train_file = '/media/chad/nara/cifar/wide/train/penultimate_conv_layer/correct_outputs.torch'
-pen_conv_error_train_file = '/media/chad/nara/cifar/wide/train/penultimate_conv_layer/incorrect_outputs.torch'
+pen_conv_correct_train_file = PATH + 'cifar/wide/train/penultimate_conv_layer/correct_outputs.torch'
+pen_conv_error_train_file = PATH + 'cifar/wide/train/penultimate_conv_layer/incorrect_outputs.torch'
 
-pen_conv_correct_valid_file = '/media/chad/nara/cifar/wide/valid/penultimate_conv_layer/correct_outputs.torch'
-pen_conv_error_valid_file = '/media/chad/nara/cifar/wide/valid/penultimate_conv_layer/incorrect_outputs.torch'
+pen_conv_correct_valid_file = PATH + 'cifar/wide/valid/penultimate_conv_layer/correct_outputs.torch'
+pen_conv_error_valid_file = PATH + 'cifar/wide/valid/penultimate_conv_layer/incorrect_outputs.torch'
 
 #error_outputs_valid_file = '/media/chad/paro/intermediate_mnist/ambiguity20/valid/list_of_incorrect_conv1_outputs.torch'
 #correct_outputs_valid_file = '/media/chad/paro/intermediate_mnist/ambiguity20/valid/list_of_correct_conv1_outputs.torch'
