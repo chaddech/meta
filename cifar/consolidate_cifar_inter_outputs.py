@@ -49,6 +49,9 @@ for inter_layer in next(os.walk(os.getcwd() + '/wide/valid/'))[1]:
     train_correct_files = os.listdir(train_correct_dir)
     train_error_files = os.listdir(train_error_dir)
 
+    train_correct_files.sort()
+    train_error_files.sort()
+    
     for i in train_correct_files:
         t = torch.load(train_correct_dir + i)
         for x in t:
