@@ -4,17 +4,19 @@ import os
 
 PATH = '/media/chad/nara/'
 
-valid_correct_tensors = []
-valid_error_tensors = []
-
-train_correct_tensors = []
-train_error_tensors = []
 
 
 
 valid_file_names = []
 inter_layers = ['output', 'last_conv_layer','pre_bn_layer']
 for inter_layer in inter_layers:
+
+    valid_correct_tensors = []
+    valid_error_tensors = []
+
+    train_correct_tensors = []
+    train_error_tensors = []
+
 
     valid_correct_dir = PATH + 'cifar/wide/valid/'+inter_layer+'/correct/'
     valid_error_dir = PATH + 'cifar/wide/valid/'+inter_layer+'/incorrect/'
