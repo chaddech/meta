@@ -1,6 +1,7 @@
 import torch
 import os
 
+valid_file_names = []
 for inter_layer in next(os.walk(os.getcwd() + '/wide/valid/'))[1]:
     print(inter_layer)
     valid_correct_tensors = []
@@ -20,8 +21,12 @@ for inter_layer in next(os.walk(os.getcwd() + '/wide/valid/'))[1]:
     valid_correct_files = os.listdir(valid_correct_dir)
     valid_error_files = os.listdir(valid_error_dir)
 
+    valid_correct_files.sort()
+    valid_error_files.sort()
+
     for i in valid_correct_files:
         t = torch.load(valid_correct_dir + i)
+        valid_file_names.append(i)
         for x in t:
             valid_correct_tensors.append(x)
 
@@ -56,3 +61,4 @@ for inter_layer in next(os.walk(os.getcwd() + '/wide/valid/'))[1]:
 
     torch.save(train_correct_tensors, os.getcwd() + '/wide/train/' + inter_layer + '/correct_outputs.torch')
     torch.save(train_error_tensors, os.getcwd() + '/wide/train/' + inter_layer + '/incorrect_outputs.torch')
+
