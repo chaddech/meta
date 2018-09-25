@@ -1,0 +1,3 @@
+[submodule "WideResNet-pytorch"]
+	path = WideResNet-pytorch
+	url = https://github.com/roop-pal/WideResNet-pytorch.git
