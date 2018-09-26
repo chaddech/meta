@@ -11,7 +11,8 @@ import torch.backends.cudnn as cudnn
 import torch.optim
 import torch.utils.data
 import torchvision.transforms as transforms
-import torchvision.datasets as datasets
+# import torchvision.datasets as datasets
+import cifar_dataset_w_idx as datasets
 from torch.autograd import Variable
 from torch.utils.data.sampler import SequentialSampler
 import IPython
@@ -124,13 +125,11 @@ def main():
     kwargs = {'num_workers': 1, 'pin_memory': True}
     assert (args.dataset == 'cifar10' or args.dataset == 'cifar100')
 
-    valid_indices = np.load('underlying_train_indices.npy')
     train_indices = np.load('underlying_valid_indices_ie_meta_train_indices.npy')
+    valid_indices = np.load('meta_val_indices.npy')
 
-    full_dataset = datasets.CIFAR100('../data', train=True, transform=transform_test, download=True)
-
-    train_dataset = torch.utils.data.Subset(full_dataset, train_indices)
-    valid_dataset = torch.utils.data.Subset(full_dataset, valid_indices)
+    train_dataset = datasets.CIFAR100('../data', train_indices, train=True, transform=transform_test, download=True)
+    valid_dataset = datasets.CIFAR100('../data', valid_indices, train=True, transform=transform_test, download=True)
 
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=args.batch_size, shuffle=False)
 
@@ -150,7 +149,7 @@ def main():
     # model = torch.nn.DataParallel(model).cuda()
     model = model.cuda()
 
-    saved_state = torch.load('../WideResNet-pytorch/runs/WideResNet-28-10/model_best.pth.tar')
+    saved_state = torch.load('../WideResNet-pytorch/runs/model_60.pth.tar')
 
     model.load_state_dict(saved_state['state_dict'])
 
@@ -185,7 +184,7 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
     model.eval()
 
     end = time.time()
-    for i, (input, target) in enumerate(val_loader):
+    for i, (indices, input, target) in enumerate(val_loader):
         target = target.cuda(async=True)
         input = input.cuda()
         input_var = torch.autograd.Variable(input)
@@ -225,6 +224,8 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
             correct_layer_hooks.append(layer.hook_list[0][where_which_correct])
             incorrect_layer_hooks.append(layer.hook_list[0][where_which_incorrect])
 
+        correct_outputs = list(zip(correct_outputs, indices[where_which_correct]))
+        incorrect_outputs = list(zip(incorrect_outputs, indices[where_which_incorrect]))
         save_tensor(correct_outputs, os.getcwd() + '/wide/valid/output/correct/correct_output' + str(i) + '.torch')
         save_tensor(incorrect_outputs,
                     os.getcwd() + '/wide/valid/output/incorrect/incorrect_output' + str(i) + '.torch')
@@ -232,7 +233,6 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
         for j, layer in enumerate(hooked_layers):
             save_tensor(correct_layer_hooks[j], os.getcwd() + '/wide/valid/' + layer.name + '_layer/correct/correct_inter_output' + str(i) + '.torch')
             save_tensor(incorrect_layer_hooks[j], os.getcwd() + '/wide/valid/' + layer.name + '_layer/incorrect/incorrect_inter_output' + str(i) + '.torch')
-
         # clear hook lists
         for layer in hooked_layers:
             layer.hook_list[:] = []
