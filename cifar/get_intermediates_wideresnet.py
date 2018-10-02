@@ -83,12 +83,11 @@ class Layer(object):
 hooked_layers = [Layer('pre_final_fc', 'input', lambda model: model.fc),
                  Layer('post_penultimate_conv', 'output', lambda model: list(model.block3.children())[0][3].conv1),
                  Layer('post_last_conv', 'output', lambda model: list(model.block3.children())[0][3].conv2),
-                 Layer('pre_bn', 'input', lambda model: model.bn1),
-                 Layer('post_bn', 'output', lambda model: model.bn1),
-                 Layer('pre_block3_bn1', 'input', lambda model: list(model.block3.children())[0][3].bn1),
-                 Layer('pre_block2_bn1', 'input', lambda model: list(model.block2.children())[0][3].bn1),
-                 Layer('post_block1_conv1', 'output', lambda model: list(model.block1.children())[0][3].conv1),
-                 Layer('post_conv1', 'output', lambda model: model.conv1)]
+                 Layer('pre_bn', 'input', lambda model: model.bn1)]
+                 #Layer('pre_block3_bn1', 'input', lambda model: list(model.block3.children())[0][3].bn1),
+                 #Layer('pre_block2_bn1', 'input', lambda model: list(model.block2.children())[0][3].bn1),
+                 #Layer('post_block1_conv1', 'output', lambda model: list(model.block1.children())[0][3].conv1),
+                 #Layer('post_conv1', 'output', lambda model: model.conv1)]
 
 
 def main():
@@ -149,7 +148,7 @@ def main():
     # model = torch.nn.DataParallel(model).cuda()
     model = model.cuda()
 
-    saved_state = torch.load('../WideResNet-pytorch/runs/model_60.pth.tar')
+    saved_state = torch.load('../WideResNet-pytorch/runs/WideResNet-28-10/model_best.pth.tar')
 
     model.load_state_dict(saved_state['state_dict'])
 
@@ -162,10 +161,11 @@ def main():
                                 weight_decay=args.weight_decay)
 
     # generate intermediate outputs
-    prec1 = generate_intermediate_outputs(val_loader, model, criterion, 0)
+    prec1 = generate_intermediate_outputs(train_loader, '/wide/train/', model, criterion, 0)
+    prec1 = generate_intermediate_outputs(val_loader, '/wide/valid/', model, criterion, 0)
 
 
-def generate_intermediate_outputs(val_loader, model, criterion, epoch):
+def generate_intermediate_outputs(val_loader, folder, model, criterion, epoch):
     batch_time = AverageMeter()
     losses = AverageMeter()
     top1 = AverageMeter()
@@ -224,15 +224,14 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
             correct_layer_hooks.append(layer.hook_list[0][where_which_correct])
             incorrect_layer_hooks.append(layer.hook_list[0][where_which_incorrect])
 
-        correct_outputs = list(zip(correct_outputs, indices[where_which_correct]))
-        incorrect_outputs = list(zip(incorrect_outputs, indices[where_which_incorrect]))
-        save_tensor(correct_outputs, os.getcwd() + '/wide/valid/output/correct/correct_output' + str(i) + '.torch')
-        save_tensor(incorrect_outputs,
-                    os.getcwd() + '/wide/valid/output/incorrect/incorrect_output' + str(i) + '.torch')
+        # correct_outputs = list(zip(correct_outputs, indices[where_which_correct]))
+        # incorrect_outputs = list(zip(incorrect_outputs, indices[where_which_incorrect]))
+        save_tensor(correct_outputs, os.getcwd() + folder + 'output/correct/correct_output' + str(i) + '.torch')
+        save_tensor(incorrect_outputs, os.getcwd() + folder + 'output/incorrect/incorrect_output' + str(i) + '.torch')
 
         for j, layer in enumerate(hooked_layers):
-            save_tensor(correct_layer_hooks[j], os.getcwd() + '/wide/valid/' + layer.name + '_layer/correct/correct_inter_output' + str(i) + '.torch')
-            save_tensor(incorrect_layer_hooks[j], os.getcwd() + '/wide/valid/' + layer.name + '_layer/incorrect/incorrect_inter_output' + str(i) + '.torch')
+            save_tensor(correct_layer_hooks[j], os.getcwd() + folder + layer.name + '_layer/correct/correct_inter_output' + str(i) + '.torch')
+            save_tensor(incorrect_layer_hooks[j], os.getcwd() + folder + layer.name + '_layer/incorrect/incorrect_inter_output' + str(i) + '.torch')
         # clear hook lists
         for layer in hooked_layers:
             layer.hook_list[:] = []

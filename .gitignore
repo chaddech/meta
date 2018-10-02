@@ -5,3 +5,6 @@ cifar/runs/**
 data/**
 .idea/**
 **.torch
+**/__pycache__/**
+**~
+cifar/results/**

@@ -50,15 +50,15 @@ parser.add_argument('--no-augment', dest='augment', action='store_false',
                     help='whether to use standard augmentation (default: True)')
 parser.add_argument('--resume', default='', type=str,
                     help='path to latest checkpoint (default: none)')
-parser.add_argument('--name', default='WideResNet-28-4', type=str,
+parser.add_argument('--name', default='WideResNet-28-10', type=str,
                     help='name of experiment')
-parser.add_argument('--tensorboard',
+parser.add_argument('--tensorboard', default=True,
                     help='Log progress to TensorBoard', action='store_true')
 parser.set_defaults(augment=True)
 
 best_prec1 = 0
-#CUDA_DEVICE = 'cuda:1'
-#torch.cuda.set_device(1)
+CUDA_DEVICE = 'cuda:0'
+torch.cuda.set_device(0)
 
 def main():
     global args, best_prec1
@@ -90,7 +90,7 @@ def main():
         normalize
         ])
 
-    kwargs = {'num_workers': 1, 'pin_memory': True}
+    kwargs = {'num_workers': 0, 'pin_memory': True}
     assert(args.dataset == 'cifar10' or args.dataset == 'cifar100')
 
     train_indices = np.load('underlying_train_indices.npy')
@@ -157,7 +157,7 @@ def main():
         save_checkpoint({
             'epoch': epoch + 1,
             'state_dict': model.state_dict(),
-            'best_prec1': best_prec1,
+            'best_prec1': best_prec1
         }, is_best)
     print('Best accuracy: ', best_prec1)
 
@@ -261,7 +261,9 @@ def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
     filename = directory + filename
     torch.save(state, filename)
     if is_best:
-        shutil.copyfile(filename, "/media/chad/nara/extras/cifar-wide/runs/%s"%(args.name) + 'model_best.pth.tar')
+        shutil.copyfile(filename, os.getcwd() + "/runs/%s"%(args.name) + '/model_best.pth.tar')
+    if state['best_prec1'] > 59 and state['best_prec1'] < 61:
+        shutil.copyfile(filename, os.getcwd() + "/runs/%s" % (args.name) + '/model_60.pth.tar')
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""

@@ -38,8 +38,8 @@ for inter_layer in next(os.walk(os.getcwd() + '/wide/valid/'))[1]:
     torch.save(valid_correct_tensors, os.getcwd() + '/wide/valid/' + inter_layer + '/correct_outputs.torch')
     torch.save(valid_error_tensors, os.getcwd() + '/wide/valid/' + inter_layer + '/incorrect_outputs.torch')
 
-    train_correct_dir = os.getcwd() + '/wide/train/' + inter_layer + '/'
-    train_error_dir = os.getcwd() + '/wide/train/' + inter_layer + '/'
+    train_correct_dir = os.getcwd() + '/wide/train/' + inter_layer + '/correct/'
+    train_error_dir = os.getcwd() + '/wide/train/' + inter_layer + '/incorrect/'
 
     if not os.path.exists(train_correct_dir):
         os.makedirs(train_correct_dir)
