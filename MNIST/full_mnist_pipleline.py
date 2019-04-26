@@ -24,8 +24,8 @@ meta_train_idx = np.load('meta_metamnist/meta_train.npy')
 meta_validation_idx = np.load('meta_metamnist/meta_valid.npy')
 
 
-CUDA_DEVICE = 'cuda:1'
-torch.cuda.set_device(1)
+CUDA_DEVICE = 'cuda:2'
+torch.cuda.set_device(2)
 
 #CUDA_DEVICE = 'cuda:'+sys.argv[1]
 #torch.cuda.set_device(int(sys.argv[1]))
@@ -534,7 +534,6 @@ def makeIntermediates(args, model, device, test_loader, mode):
             incorrect_fc1_outs = fc1_output[0][where_wrong]
 
 
-
             where_correct = np.where(np.equal(pred.cpu(),target.cpu().view_as(pred)))[0]
             correct_outs = output[where_correct]
 
@@ -544,7 +543,7 @@ def makeIntermediates(args, model, device, test_loader, mode):
 
 
             for i in incorrect_outs:
-                incorrect_outputs.append(torch.exp(i))
+                incorrect_outputs.append(i)
 
             for i in incorrect_conv1_outs:
                 incorrect_conv1_outputs.append(i)
@@ -558,7 +557,7 @@ def makeIntermediates(args, model, device, test_loader, mode):
 
 
             for i in correct_outs:
-                correct_outputs.append(torch.exp(i))
+                correct_outputs.append(i)
 
             for i in correct_conv1_outs:
                 correct_conv1_outputs.append(i)
@@ -926,7 +925,7 @@ def main():
                        ]))
     """
 
-    for x in [40]:
+    for x in [20]:
         meta_sizes_accuracies_file.write('base network epochs trained:\n')
         meta_sizes_accuracies_file.write(str(x)+'\n')
         args.base_train_num_epochs = x
