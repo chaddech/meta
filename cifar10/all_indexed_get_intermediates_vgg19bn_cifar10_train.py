@@ -12,7 +12,7 @@ import torch.optim
 import torch.utils.data
 import torchvision.transforms as transforms
 #import torchvision.datasets as datasets
-#import cifar_dataset_w_idx as datasets
+from cifar_dataset_w_idx import cifar10
 from torch.autograd import Variable
 from torch.utils.data.sampler import SequentialSampler
 #from fewer_max_vgg import *
@@ -22,6 +22,11 @@ import torchvision.models as models
 from datafolder import ImageFolder
 # used for logging to TensorBoard
 from tensorboard_logger import configure, log_value
+from new_smaller_vgg import vgg19_bn
+
+# **************************************************
+# PLACES WHERE CHANGES ARE NEEDED ARE MARKED WITH **
+# **************************************************
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
@@ -40,9 +45,6 @@ parser = argparse.ArgumentParser(description='vgg_cifar_10_get_intermediates')
 parser.add_argument('--dataset', default='cifar10', type=str,
                     help='dataset (cifar10 [default] or cifar100)')
 
-
-parser.add_argument('--data',  default='/media/chad/paro/imagenet/',
-                    help='path to dataset')
 
 parser.add_argument('-a', '--arch', default='vgg19_bn',
                     choices=model_names,
@@ -109,7 +111,10 @@ class Layer(object):
 
 # Lists to hold the intermediate outputs captured by hooks
 # ** UPDATE BASED ON WHICH LAYERS YOU WANT TO SAVE
-hooked_layers = [Layer('conv49_output_post_bn_layer', 'input', lambda model: list(model.children())[-1][0]),
+hooked_layers = [Layer('conv_0_layer', 'output', lambda model: list(model.children())[0][0]),
+                 Layer('conv_21_layer', 'output', lambda model: list(model.children())[0][21]),
+                 Layer('conv_47_layer', 'output', lambda model: list(model.children())[0][47]),
+                 Layer('conv_47_post_maxpool_layer', 'output', lambda model: list(model.children())[0][50]),
                  Layer('fc_0_layer', 'output', lambda model: list(model.children())[-1][0]),
                  Layer('fc_3_layer', 'output', lambda model: list(model.children())[-1][3])]
 
@@ -148,20 +153,18 @@ def main():
         normalize
         ])
     kwargs = {'num_workers': 1, 'pin_memory': True}
-    #assert(args.dataset == 'cifar10' or args.dataset == 'cifar100')
-    assert(args.dataset == 'cifar10')
 
     valid_indices = np.load('cifar10_valid_indices.npy')
 
     valid_sampler = SubsetRandomSampler(valid_indices)
 
-
+    # ** POSSIBLY CHANGE WHERE DATASET GOES
     train_loader = torch.utils.data.DataLoader(
-        datasets.__dict__[args.dataset.upper()]('../../data', train=True, download=True,
+        cifar10('../../data', train=True, download=True,
                          transform=transform_train),
         batch_size=args.batch_size, shuffle = True, **kwargs)
     val_loader = torch.utils.data.DataLoader(
-        datasets.__dict__[args.dataset.upper()]('../../data', train=False, transform=transform_test),
+        cifar10('../../data', train=False, transform=transform_test),
         batch_size=args.batch_size, sampler = valid_sampler, **kwargs)
 
     # create model
@@ -172,8 +175,6 @@ def main():
     saved_state = torch.load('../WideResNet-pytorch/runs/model_60.pth.tar')
     model.load_state_dict(saved_state['state_dict'])
     # get the number of model parameters
-    print('Number of model parameters: {}'.format(
-        sum([p.data.nelement() for p in model.parameters()])))
 
     device = torch.device(CUDA_DEVICE)
     # for training on multiple GPUs.
