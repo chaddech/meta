@@ -79,7 +79,7 @@ parser.add_argument('--name', default='vgg19bn', type=str,
                     help='name of experiment')
 parser.add_argument('--tensorboard',
                     help='Log progress to TensorBoard', action='store_true')
-=parser.add_argument('-j', '--workers', default=1, type=int, metavar='N',
+parser.add_argument('-j', '--workers', default=1, type=int, metavar='N',
                     help='number of data loading workers (default: 4)')
 parser.add_argument('--seed', type=int, default=10027, metavar='S',
                     help='random seed (default: 10027)')
