@@ -152,18 +152,18 @@ def main():
             transforms.RandomCrop(32),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
-            normalize,
+            transforms.Normalize(mean=[x / 255.0 for x in [125.3, 123.0, 113.9]], std=[x / 255.0 for x in [63.0, 62.1, 66.7]])
             ])
 
     # TODO: Change transform to: https://github.com/kuangliu/pytorch-cifar/issues/19 ?
     else:
         transform_train = transforms.Compose([
             transforms.ToTensor(),
-            normalize,
+            transforms.Normalize(mean=[x / 255.0 for x in [125.3, 123.0, 113.9]], std=[x / 255.0 for x in [63.0, 62.1, 66.7]])
             ])
     transform_test = transforms.Compose([
         transforms.ToTensor(),
-        normalize
+        transforms.Normalize(mean=[x / 255.0 for x in [125.3, 123.0, 113.9]], std=[x / 255.0 for x in [63.0, 62.1, 66.7]])
         ])
     kwargs = {'num_workers': 1, 'pin_memory': True}
 
