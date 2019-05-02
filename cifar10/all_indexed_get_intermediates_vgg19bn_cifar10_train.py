@@ -243,7 +243,7 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
     for i, (indices, paths, input, target) in enumerate(val_loader):
 
 
-        target = target.cuda(async=True)
+        target = target.cuda(non_blockin=True)
         input = input.cuda()
         input_var = torch.autograd.Variable(input)
         target_var = torch.autograd.Variable(target)
