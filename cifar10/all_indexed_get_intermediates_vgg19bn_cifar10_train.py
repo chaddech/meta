@@ -14,7 +14,7 @@ import torchvision.transforms as transforms
 #import torchvision.datasets as datasets
 from cifar_dataset_w_idx import cifar10
 from torch.autograd import Variable
-from torch.utils.data.sampler import SequentialSampler
+from torch.utils.data.sampler import SequentialSampler, SubsetRandomSampler
 #from fewer_max_vgg import *
 import sys
 #sys.path.insert(0, '../WideResNet-pytorch/')
