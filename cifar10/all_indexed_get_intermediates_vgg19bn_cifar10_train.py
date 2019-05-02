@@ -167,6 +167,7 @@ def main():
         ])
     kwargs = {'num_workers': 1, 'pin_memory': True}
 
+    valid_indices = None
     if mode == 'valid':
         valid_indices = np.load('cifar10_valid_indices.npy')
     elif mode == 'test':
