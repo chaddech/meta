@@ -12,14 +12,14 @@ import torch.optim
 import torch.utils.data
 import torchvision.transforms as transforms
 #import torchvision.datasets as datasets
-from cifar_dataset_w_idx import cifar10
+from cifar_dataset_w_idx import CIFAR10 as cifar10
 from torch.autograd import Variable
 from torch.utils.data.sampler import SequentialSampler, SubsetRandomSampler
 #from fewer_max_vgg import *
 import sys
 #sys.path.insert(0, '../WideResNet-pytorch/')
 import torchvision.models as models
-from datafolder import ImageFolder
+#from datafolder import ImageFolder
 # used for logging to TensorBoard
 from tensorboard_logger import configure, log_value
 from new_smaller_vgg import vgg19_bn
