@@ -73,7 +73,7 @@ parser.add_argument('--widen-factor', default=10, type=int,
                     help='widen factor (default: 10)')
 parser.add_argument('--droprate', default=0, type=float,
                     help='dropout probability (default: 0.0)')
-=parser.add_argument('--resume', default='', type=str,
+parser.add_argument('--resume', default='', type=str,
                     help='path to latest checkpoint (default: none)')
 parser.add_argument('--name', default='vgg19bn', type=str,
                     help='name of experiment')
