@@ -255,7 +255,6 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
 
         # measure accuracy and record loss
         prec1 = accuracy(output.data, target, topk=(1,))[0]
-        IPython.embed()
         soutput = F.softmax(output, dim=1)
 
         losses.update(loss.data.item(), input.size(0))
