@@ -19,23 +19,23 @@ torch.cuda.set_device(int(sys.argv[3]))
 
 
 #make a folder to house results
-base_path = '/media/chad/nara/meta/imagenet/results/'
+base_path = '/home/seungwookhan/cifar_results/'
 results_folder = base_path +str(sys.argv[0])+ sys.argv[1] + sys.argv[2] + str(datetime.datetime.now())+'/'
 os.mkdir(results_folder)
 copyfile(sys.argv[0], results_folder + sys.argv[0])
 accuracies_file_name = results_folder+sys.argv[0]+sys.argv[1]+sys.argv[2]+'_accuracies_record.txt'
-final_results_file_name = results_folder + 'final_best_results_record_wideresnet_much_larger_little_drop_fully_trained.txt'
+final_results_file_name = results_folder + 'final_best_results_record_vgg19_bn_cifar10.txt'
 accuracies_file = open(accuracies_file_name, "w+")
 accuracies_file.close()
 
 configure(results_folder+sys.argv[0]+'tblogfile')
 
 # ** CHANGE DIRECTORY INFORMATION
-single_layer_correct_train_file = '/media/chad/delft/meta/imagenet_intermediates/' + sys.argv[1] + '/train/' + sys.argv[2] + '/correct/train_sorted_outputs.torch'
-single_layer_incorrect_train_file = '/media/chad/delft/meta/imagenet_intermediates/' + sys.argv[1] + '/train/' + sys.argv[2] + '/incorrect/train_sorted_outputs.torch'
+single_layer_correct_train_file = '/home/seungwookhan/cifar10_intermediates/' + sys.argv[1] + '/train/' + sys.argv[2] + '/correct/sorted_outputs.torch'
+single_layer_incorrect_train_file = '/home/seungwookhan/cifar10_intermediates/' + sys.argv[1] + '/train/' + sys.argv[2] + '/incorrect/sorted_outputs.torch'
 
-single_layer_correct_valid_file = '/media/chad/delft/meta/imagenet_intermediates/' + sys.argv[1] + '/valid/' + sys.argv[2] + '/correct/valid_sorted_outputs.torch'
-single_layer_incorrect_valid_file = '/media/chad/delft/meta/imagenet_intermediates/' + sys.argv[1] + '/valid/' + sys.argv[2] + '/incorrect/valid_sorted_outputs.torch'
+single_layer_correct_valid_file = '/home/seungwookhan/cifar10_intermediates/' + sys.argv[1] + '/valid/' + sys.argv[2] + '/correct/sorted_outputs.torch'
+single_layer_incorrect_valid_file = '/home/seungwookhan/cifar10_intermediates/' + sys.argv[1] + '/valid/' + sys.argv[2] + '/incorrect/sorted_outputs.torch'
 
 
 
