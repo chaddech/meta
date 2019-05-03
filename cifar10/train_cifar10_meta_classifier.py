@@ -123,7 +123,7 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 
 		for layer in range(len(self.X_data)):
 			data = self.X_data[layer][idx][0].float()
-			processed_data = data.reshape(data.shape[0] * data.shape[1] * data.shape[2]).to(CUDA_DEVICE)
+			processed_data = process_layer_data(data)
 			Xs_to_return.append(processed_data)
 			
 		#Xs_to_return = (Xs_to_return[0], Xs_to_return[1], Xs_to_return[2], Xs_to_return[3])
