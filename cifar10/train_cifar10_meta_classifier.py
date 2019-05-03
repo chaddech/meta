@@ -96,7 +96,7 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 		if len(data_shape) > 1:
 			self.dim_size = data_shape[0] * data_shape[1] * data_shape[2]
 		else:
-			self.dim_sime = data_shape[0]
+			self.dim_size = data_shape[0]
 
 		self.correct_len = num_correct
 		self.error_len = num_errors
