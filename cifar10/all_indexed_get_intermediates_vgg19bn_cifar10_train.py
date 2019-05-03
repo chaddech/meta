@@ -12,7 +12,7 @@ import torch.optim
 import torch.utils.data
 import torchvision.transforms as transforms
 #import torchvision.datasets as datasets
-from cifar_dataset_w_idx import CIFAR10 as cifar10
+from original_cifar_dataset_w_idx import CIFAR10 as cifar10
 from torch.autograd import Variable
 from torch.utils.data.sampler import SequentialSampler, SubsetRandomSampler
 #from fewer_max_vgg import *
@@ -23,7 +23,7 @@ import torchvision.models as models
 # used for logging to TensorBoard
 from tensorboard_logger import configure, log_value
 from new_smaller_vgg import vgg19_bn
-
+import IPython
 # **************************************************
 # PLACES WHERE CHANGES ARE NEEDED ARE MARKED WITH **
 # **************************************************
@@ -241,10 +241,10 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
 
     end = time.time()
     batch_counter = 0
-    for i, (indices, paths, input, target) in enumerate(val_loader):
+    for i, (paths, input, target) in enumerate(val_loader):
+        IPython.embed()
 
-
-        target = target.cuda(non_blockin=True)
+        target = target.cuda(non_blocking=True)
         input = input.cuda()
         input_var = torch.autograd.Variable(input)
         target_var = torch.autograd.Variable(target)
