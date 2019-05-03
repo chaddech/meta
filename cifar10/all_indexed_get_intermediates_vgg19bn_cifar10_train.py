@@ -40,7 +40,7 @@ model_name = 'vgg19_bn'
 
 
 # ** CHANGE BASE PATH 
-base_path = "/media/chad/delft/meta/cifar_intermediates/"
+base_path = "~/cifar10_intermediates/"
 parser = argparse.ArgumentParser(description='vgg_cifar_10_get_intermediates')
 parser.add_argument('--dataset', default='cifar10', type=str,
                     help='dataset (cifar10 [default] or cifar100)')
@@ -75,7 +75,7 @@ parser.add_argument('--droprate', default=0, type=float,
                     help='dropout probability (default: 0.0)')
 =parser.add_argument('--resume', default='', type=str,
                     help='path to latest checkpoint (default: none)')
-parser.add_argument('--name', default='vgg16bn', type=str,
+parser.add_argument('--name', default='vgg19bn', type=str,
                     help='name of experiment')
 parser.add_argument('--tensorboard',
                     help='Log progress to TensorBoard', action='store_true')
@@ -83,13 +83,19 @@ parser.add_argument('--tensorboard',
                     help='number of data loading workers (default: 4)')
 parser.add_argument('--seed', type=int, default=10027, metavar='S',
                     help='random seed (default: 10027)')
+parser.add_argument('--cuda', type=int, default=-1,
+                    help='CUDA device to use')
+parser.add_argument('--mode', default='train',
+                    help='Mode: train, valid, or test')
 parser.set_defaults(augment=False)
+
 
 best_prec1 = 0
 
 # ** SET CUDA DEVICE
-CUDA_DEVICE = 'cuda:2'
-torch.cuda.set_device(2)
+DEVICE = None
+# CUDA_DEVICE = 'cuda:2'
+# torch.cuda.set_device(2)
 
 
 
@@ -120,12 +126,18 @@ hooked_layers = [Layer('conv_0_layer', 'output', lambda model: list(model.childr
 
 
 def main():
-    global args, best_prec1
+    global device, args, best_prec1, mode
     args = parser.parse_args()
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
     torch.random.manual_seed(args.seed)
     torch.cuda.manual_seed(args.seed)
+
+    # Setting mode
+    mode = args.mode
+
+    # Setting CUDA device
+    DEVICE = torch.device(args.cuda)
 
     #IGNORE
     if args.tensorboard:
@@ -143,6 +155,7 @@ def main():
             normalize,
             ])
 
+    # TODO: Change transform to: https://github.com/kuangliu/pytorch-cifar/issues/19 ?
     else:
         transform_train = transforms.Compose([
             transforms.ToTensor(),
@@ -154,34 +167,35 @@ def main():
         ])
     kwargs = {'num_workers': 1, 'pin_memory': True}
 
-    valid_indices = np.load('cifar10_valid_indices.npy')
+    if mode == 'valid':
+        valid_indices = np.load('cifar10_valid_indices.npy')
+    elif mode == 'test':
+        valid_indices = np.load('cifar10_test_indices.npy')
 
     valid_sampler = SubsetRandomSampler(valid_indices)
 
     # ** POSSIBLY CHANGE WHERE DATASET GOES
     train_loader = torch.utils.data.DataLoader(
-        cifar10('../../data', train=True, download=True,
+        cifar10('../../cifar10_data', train=True, download=True,
                          transform=transform_train),
         batch_size=args.batch_size, shuffle = True, **kwargs)
     val_loader = torch.utils.data.DataLoader(
-        cifar10('../../data', train=False, transform=transform_test),
+        cifar10('../../cifar10_data', train=False, transform=transform_test),
         batch_size=args.batch_size, sampler = valid_sampler, **kwargs)
 
     # create model
     model = vgg19_bn(num_classes=10)
 
-
     # ** CHANGE LOCATION OF LOADED MODEL
-    saved_state = torch.load('../WideResNet-pytorch/runs/model_60.pth.tar')
+    saved_state = torch.load('./cifar10_vgg19_bn_model_best91340.pth.tar')
     model.load_state_dict(saved_state['state_dict'])
     # get the number of model parameters
 
-    device = torch.device(CUDA_DEVICE)
+    #device = torch.device(CUDA_DEVICE)
     # for training on multiple GPUs.
     # Use CUDA_VISIBLE_DEVICES=0,1 to specify which GPUs to use
     # model = torch.nn.DataParallel(model).cuda()
-    model = model.cuda(CUDA_DEVICE)
-
+    model = model.to(DEVICE)
 
     cudnn.benchmark = True
 
@@ -191,7 +205,10 @@ def main():
                                 weight_decay=args.weight_decay)
 
     # generate intermediate outputs
-    prec1 = generate_intermediate_outputs(val_loader, model, criterion, 0)
+    if mode == 'train':
+        prec1 = generate_intermediate_outputs(train_loader, model, criterion, 0)
+    elif mode == 'valid' or mode == 'test':
+        prec1 = generate_intermediate_outputs(val_loader, model, criterion, 0)
 
 
 
