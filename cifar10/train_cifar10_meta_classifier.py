@@ -94,8 +94,10 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 		if len(self.X_data[0][0][0].shape) > 2:
 			self.isConv = True
 			self.num_filters = self.X_data[0][0][0].shape[0]
+			IPython.embed()
 		else:
 			self.dim_size = self.X_data[0][0][0].shape[0]
+			IPython.embed()
 
 		self.correct_len = num_correct
 		self.error_len = num_errors
