@@ -299,8 +299,8 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
 
         #paths = np.asarray(paths)
 
-        correct_indices_and_paths = list(zip(indices[where_which_correct], target[where_which_correct], predictions[where_which_correct])
-        incorrect_indices_and_paths = list(zip(indices[where_which_incorrect], target[where_which_incorrect], predictions[where_which_incorrect])
+        correct_indices_and_paths = list(zip(indices[where_which_correct], target[where_which_correct], predictions[where_which_correct]))
+        incorrect_indices_and_paths = list(zip(indices[where_which_incorrect], target[where_which_incorrect], predictions[where_which_incorrect]))
  
 
         # ** CHECK PATHS -- SHOULD BE OK BASED ON BASE PATH
