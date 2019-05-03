@@ -124,6 +124,7 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 		for layer in range(len(self.X_data)):
 			data = self.X_data[layer][idx][0].float()
 			processed_data = process_layer_data(data)
+			IPython.embed()
 			Xs_to_return.append(processed_data)
 			
 		#Xs_to_return = (Xs_to_return[0], Xs_to_return[1], Xs_to_return[2], Xs_to_return[3])
@@ -339,7 +340,7 @@ def train(model, device, train_loader, optimizer, epoch):
 		#only need to put tensors in position 0 onto device (?)
 		#CHECK DATA 
 		#import IPython
-		IPython.embed()
+		#IPython.embed()
 
 		data[0] = data[0].to(device)
 
@@ -476,7 +477,6 @@ def main():
 
 	train_loader = torch.utils.data.DataLoader(train_dataset, batch_size = 32,  shuffle = False,
 		sampler = train_weighted_sampler)
-	IPython.embed()
 	error_validation_loader = torch.utils.data.DataLoader(valid_error_dataset, batch_size = 124,  shuffle = False)
 	correct_validation_loader = torch.utils.data.DataLoader(valid_correct_dataset, batch_size = 124,  shuffle = False)
 
