@@ -11,7 +11,7 @@ import sys
 from shutil import copyfile
 import datetime
 from tensorboard_logger import configure, log_value
-
+import IPython
 
 #os.environ["CUDA_VISIBLE_DEVICES"]="2"
 CUDA_DEVICE = 'cuda:'+sys.argv[3]
@@ -19,7 +19,7 @@ torch.cuda.set_device(int(sys.argv[3]))
 
 
 #make a folder to house results
-base_path = '/home/seungwookhan/cifar_results/'
+base_path = '/home/seungwookhan/cifar10_results/'
 results_folder = base_path +str(sys.argv[0])+ sys.argv[1] + sys.argv[2] + str(datetime.datetime.now())+'/'
 os.mkdir(results_folder)
 copyfile(sys.argv[0], results_folder + sys.argv[0])
@@ -116,9 +116,7 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 		Xs_to_return = []
 
 		for layer in range(len(self.X_data)):
-
 			Xs_to_return.append(self.X_data[layer][idx][0].float().to(CUDA_DEVICE))
-
 		#Xs_to_return = (Xs_to_return[0], Xs_to_return[1], Xs_to_return[2], Xs_to_return[3])
 		Xs_to_return = (Xs_to_return[0],self.X_data[layer][idx][1])
 
