@@ -91,8 +91,12 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 
 		num_errors = len(self.X_data[0]) - num_correct
 		
+		
 		data_shape = self.X_data[0][0][0].shape
-		self.dim_size = data_shape[0] * data_shape[1] * data_shape[2]
+		if len(data_shape) > 1:
+			self.dim_size = data_shape[0] * data_shape[1] * data_shape[2]
+		else:
+			self.dim_sime = data_shape[0]
 
 		self.correct_len = num_correct
 		self.error_len = num_errors
@@ -214,8 +218,15 @@ class Net(nn.Module):
 
 		return F.log_softmax(x, dim = 1)
 
+def process_layer_data(data):
+	processed_data = None
 
-
+	if 'conv' in LAYER_NAME:
+		processed_data = data.reshape(data.shape[0] * data.shape[1] * data.shape[2]).to(CUDA_DEVICE)
+	else:
+		processsed_data = data.to(CUDA_DEVICE)
+	
+	return processed_data
 
 
 
