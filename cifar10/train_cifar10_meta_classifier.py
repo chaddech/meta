@@ -124,7 +124,6 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 		for layer in range(len(self.X_data)):
 			data = self.X_data[layer][idx][0].float()
 			processed_data = process_layer_data(data)
-			IPython.embed()
 			Xs_to_return.append(processed_data)
 			
 		#Xs_to_return = (Xs_to_return[0], Xs_to_return[1], Xs_to_return[2], Xs_to_return[3])
@@ -225,7 +224,7 @@ def process_layer_data(data):
 	if 'conv' in LAYER_NAME:
 		processed_data = data.reshape(data.shape[0] * data.shape[1] * data.shape[2]).to(CUDA_DEVICE)
 	else:
-		processsed_data = data.to(CUDA_DEVICE)
+		processed_data = data.to(CUDA_DEVICE)
 	
 	return processed_data
 
