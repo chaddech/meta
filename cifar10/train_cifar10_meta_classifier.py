@@ -43,7 +43,7 @@ single_layer_incorrect_valid_file = '/home/seungwookhan/cifar10_intermediates/' 
 
 
 
-num_epochs = 75
+num_epochs = 50
 
 class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 	def __init__(self, error_files, correct_files, one_class = False, transform=None):
