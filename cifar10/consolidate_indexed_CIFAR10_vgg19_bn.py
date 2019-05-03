@@ -4,8 +4,9 @@ import os
 
 
 # ** CHANGE BASE PATH AND INTER LAYERS TO MATCH DIRECTORY STRUCTURE AND LAYERS SAVED
-base_path = '/media/chad/delft/meta/imagenet_intermediates/resnet18/'
-inter_layers = ['last_linear_input_layer/', 'output/']
+base_path = '~/cifar_imtermediates/'
+inter_layers = ['conv_0_layer_layer/', 'conv_21_layer_layer/', 'conv_47_layer_layer/', 'conv_47_post_maxpool_layer_layer/'
+				'fc_0_layer_layer/', 'fc_3_layer_layer/', 'indices/', 'output/']
 
 
 for inter_layer in inter_layers:
@@ -26,7 +27,7 @@ for inter_layer in inter_layers:
 						tensors.append(x)
 
 
-			torch.save(tensors, base_path + which_set+inter_layer+in_co+'train_sorted_outputs.torch')
+			torch.save(tensors, base_path + which_set+inter_layer+in_co+'sorted_outputs.torch')
 
 			#np.save(base_path + which_set+inter_layer+in_co+'_sorted_outputs.np', np_indices)
 
