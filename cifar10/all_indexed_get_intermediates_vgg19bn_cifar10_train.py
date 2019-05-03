@@ -241,8 +241,7 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
 
     end = time.time()
     batch_counter = 0
-    for i, (paths, input, target) in enumerate(val_loader):
-        IPython.embed()
+    for i, (indices, input, target) in enumerate(val_loader):
 
         target = target.cuda(non_blocking=True)
         input = input.cuda()
@@ -298,10 +297,10 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
         correct_outputs = list(zip(correct_outputs, indices[where_which_correct], correct_predictions, target[where_which_correct]))
         incorrect_outputs = list(zip(incorrect_outputs, indices[where_which_incorrect], incorrect_predictions, target[where_which_incorrect]))
 
-        paths = np.asarray(paths)
+        #paths = np.asarray(paths)
 
-        correct_indices_and_paths = list(zip(indices[where_which_correct], target[where_which_correct], predictions[where_which_correct], paths[where_which_correct]))
-        incorrect_indices_and_paths = list(zip(indices[where_which_incorrect], target[where_which_incorrect], predictions[where_which_incorrect], paths[where_which_incorrect]))
+        correct_indices_and_paths = list(zip(indices[where_which_correct], target[where_which_correct], predictions[where_which_correct])
+        incorrect_indices_and_paths = list(zip(indices[where_which_incorrect], target[where_which_incorrect], predictions[where_which_incorrect])
  
 
         # ** CHECK PATHS -- SHOULD BE OK BASED ON BASE PATH
