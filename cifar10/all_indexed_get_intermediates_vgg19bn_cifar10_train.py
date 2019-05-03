@@ -255,7 +255,8 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
 
         # measure accuracy and record loss
         prec1 = accuracy(output.data, target, topk=(1,))[0]
-        soutput = F.softmax(output)
+        IPython.embed()
+        soutput = F.softmax(output, dim=1)
 
         losses.update(loss.data.item(), input.size(0))
         top1.update(prec1.item(), input.size(0))
@@ -354,7 +355,7 @@ def save_tensor(tensor, path):
 def get_acc_info(output, target, topk=(1,)):
     maxk = max(topk)
     batch_size = target.size(0)
-    soutput = nn.functional.softmax(torch.autograd.Variable(output))
+    soutput = nn.functional.softmax(torch.autograd.Variable(output), dim=1)
 
     _, pred = output.topk(maxk, 1, True, True)
     pred = pred.t()
