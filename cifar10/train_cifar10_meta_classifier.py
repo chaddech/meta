@@ -476,6 +476,7 @@ def main():
 
 	train_loader = torch.utils.data.DataLoader(train_dataset, batch_size = 32,  shuffle = False,
 		sampler = train_weighted_sampler)
+	IPython.embed()
 	error_validation_loader = torch.utils.data.DataLoader(valid_error_dataset, batch_size = 124,  shuffle = False)
 	correct_validation_loader = torch.utils.data.DataLoader(valid_correct_dataset, batch_size = 124,  shuffle = False)
 
