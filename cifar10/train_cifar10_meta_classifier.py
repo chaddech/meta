@@ -339,7 +339,7 @@ def train(model, device, train_loader, optimizer, epoch):
 		#only need to put tensors in position 0 onto device (?)
 		#CHECK DATA 
 		#import IPython
-		#IPython.embed()
+		IPython.embed()
 
 		data[0] = data[0].to(device)
 
