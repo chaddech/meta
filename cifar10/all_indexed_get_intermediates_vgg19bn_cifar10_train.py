@@ -40,7 +40,7 @@ model_name = 'vgg19_bn'
 
 
 # ** CHANGE BASE PATH 
-base_path = "~/cifar10_intermediates/"
+base_path = "/home/seungwookhan/cifar10_intermediates/"
 parser = argparse.ArgumentParser(description='vgg_cifar_10_get_intermediates')
 parser.add_argument('--dataset', default='cifar10', type=str,
                     help='dataset (cifar10 [default] or cifar100)')

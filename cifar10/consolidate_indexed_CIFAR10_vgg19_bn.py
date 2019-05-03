@@ -4,7 +4,7 @@ import os
 
 
 # ** CHANGE BASE PATH AND INTER LAYERS TO MATCH DIRECTORY STRUCTURE AND LAYERS SAVED
-base_path = '~/cifar_imtermediates/'
+base_path = '/home/seungwookhan/cifar_imtermediates/'
 inter_layers = ['conv_0_layer_layer/', 'conv_21_layer_layer/', 'conv_47_layer_layer/', 'conv_47_post_maxpool_layer_layer/'
 				'fc_0_layer_layer/', 'fc_3_layer_layer/', 'indices/', 'output/']
 
