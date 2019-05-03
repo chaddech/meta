@@ -13,6 +13,10 @@ import datetime
 from tensorboard_logger import configure, log_value
 import IPython
 
+MODEL_NAME = sys.argv[1]
+LAYER_NAME = sys.argv[2]
+CUDA = sys.argv[3]
+
 #os.environ["CUDA_VISIBLE_DEVICES"]="2"
 CUDA_DEVICE = 'cuda:'+sys.argv[3]
 torch.cuda.set_device(int(sys.argv[3]))
@@ -20,10 +24,10 @@ torch.cuda.set_device(int(sys.argv[3]))
 
 #make a folder to house results
 base_path = '/home/seungwookhan/cifar10_results/'
-results_folder = base_path +str(sys.argv[0])+ sys.argv[1] + sys.argv[2] + str(datetime.datetime.now())+'/'
+results_folder = base_path +str(sys.argv[0])+ MODEL_NAME + LAYER_NAME + str(datetime.datetime.now())+'/'
 os.mkdir(results_folder)
 copyfile(sys.argv[0], results_folder + sys.argv[0])
-accuracies_file_name = results_folder+sys.argv[0]+sys.argv[1]+sys.argv[2]+'_accuracies_record.txt'
+accuracies_file_name = results_folder+sys.argv[0]+MODEL_NAME+LAYER_NAME+'_accuracies_record.txt'
 final_results_file_name = results_folder + 'final_best_results_record_vgg19_bn_cifar10.txt'
 accuracies_file = open(accuracies_file_name, "w+")
 accuracies_file.close()
@@ -31,11 +35,11 @@ accuracies_file.close()
 configure(results_folder+sys.argv[0]+'tblogfile')
 
 # ** CHANGE DIRECTORY INFORMATION
-single_layer_correct_train_file = '/home/seungwookhan/cifar10_intermediates/' + sys.argv[1] + '/train/' + sys.argv[2] + '/correct/sorted_outputs.torch'
-single_layer_incorrect_train_file = '/home/seungwookhan/cifar10_intermediates/' + sys.argv[1] + '/train/' + sys.argv[2] + '/incorrect/sorted_outputs.torch'
+single_layer_correct_train_file = '/home/seungwookhan/cifar10_intermediates/' + MODEL_NAME + '/train/' + LAYER_NAME + '/correct/sorted_outputs.torch'
+single_layer_incorrect_train_file = '/home/seungwookhan/cifar10_intermediates/' + MODEL_NAME + '/train/' + LAYER_NAME + '/incorrect/sorted_outputs.torch'
 
-single_layer_correct_valid_file = '/home/seungwookhan/cifar10_intermediates/' + sys.argv[1] + '/valid/' + sys.argv[2] + '/correct/sorted_outputs.torch'
-single_layer_incorrect_valid_file = '/home/seungwookhan/cifar10_intermediates/' + sys.argv[1] + '/valid/' + sys.argv[2] + '/incorrect/sorted_outputs.torch'
+single_layer_correct_valid_file = '/home/seungwookhan/cifar10_intermediates/' + MODEL_NAME + '/valid/' + LAYER_NAME + '/correct/sorted_outputs.torch'
+single_layer_incorrect_valid_file = '/home/seungwookhan/cifar10_intermediates/' + MODEL_NAME + '/valid/' + LAYER_NAME + '/incorrect/sorted_outputs.torch'
 
 
 
@@ -113,11 +117,14 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 
 
 	def __getitem__(self, idx):
+		global LAYER_NAME
 		Xs_to_return = []
 
 		for layer in range(len(self.X_data)):
-			Xs_to_return.append(self.X_data[layer][idx][0].float().to(CUDA_DEVICE))
-			IPython.embed()
+			data = self.X_data[layer][idx][0].float()
+			processed_data = data.reshape(data.shape[0] * data.shape[1] * data.shape[2]).to(CUDA_DEVICE)
+			Xs_to_return.append(processed_data)
+			
 		#Xs_to_return = (Xs_to_return[0], Xs_to_return[1], Xs_to_return[2], Xs_to_return[3])
 		Xs_to_return = (Xs_to_return[0],self.X_data[layer][idx][1])
 
