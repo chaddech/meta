@@ -117,6 +117,7 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 
 		for layer in range(len(self.X_data)):
 			Xs_to_return.append(self.X_data[layer][idx][0].float().to(CUDA_DEVICE))
+			IPython.embed()
 		#Xs_to_return = (Xs_to_return[0], Xs_to_return[1], Xs_to_return[2], Xs_to_return[3])
 		Xs_to_return = (Xs_to_return[0],self.X_data[layer][idx][1])
 
