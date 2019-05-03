@@ -255,7 +255,7 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
 
         # measure accuracy and record loss
         prec1 = accuracy(output.data, target, topk=(1,))[0]
-        soutput = F.softmax(output)
+        soutput = F.softmax(output, dim=1)
 
         losses.update(loss.data.item(), input.size(0))
         top1.update(prec1.item(), input.size(0))
@@ -299,8 +299,8 @@ def generate_intermediate_outputs(val_loader, model, criterion, epoch):
 
         #paths = np.asarray(paths)
 
-        correct_indices_and_paths = list(zip(indices[where_which_correct], target[where_which_correct], predictions[where_which_correct])
-        incorrect_indices_and_paths = list(zip(indices[where_which_incorrect], target[where_which_incorrect], predictions[where_which_incorrect])
+        correct_indices_and_paths = list(zip(indices[where_which_correct], target[where_which_correct], predictions[where_which_correct]))
+        incorrect_indices_and_paths = list(zip(indices[where_which_incorrect], target[where_which_incorrect], predictions[where_which_incorrect]))
  
 
         # ** CHECK PATHS -- SHOULD BE OK BASED ON BASE PATH
@@ -354,7 +354,7 @@ def save_tensor(tensor, path):
 def get_acc_info(output, target, topk=(1,)):
     maxk = max(topk)
     batch_size = target.size(0)
-    soutput = nn.functional.softmax(torch.autograd.Variable(output))
+    soutput = nn.functional.softmax(torch.autograd.Variable(output), dim=1)
 
     _, pred = output.topk(maxk, 1, True, True)
     pred = pred.t()
