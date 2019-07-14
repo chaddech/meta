@@ -197,7 +197,7 @@ def main():
 		model = ConvNet(num_filters_in_input).to(device)
 	else: 
 		size_of_first_layer = train_dataset.get_size()
-		model=Net(size_of_first_layer).to(device)
+		model=Net10(size_of_first_layer).to(device)
 
 
 	optimizer = optim.Adam(model.parameters(),lr=.00001)
