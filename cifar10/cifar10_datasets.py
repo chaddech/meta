@@ -1,9 +1,18 @@
 import torch
 from torch.utils.data import Dataset
-from train_cifar10_meta_classifier import process_layer_data
+
+def process_layer_data(data, layer_name):
+	processed_data = None
+
+	if 'conv' in layer_name:
+		processed_data = data.reshape(data.shape[0] * data.shape[1] * data.shape[2])
+	else:
+		processed_data = data
+	
+	return processed_data
 
 class ImageNetInterMediateLayersInMemoryDataset(Dataset):
-    def __init__(self, error_files, correct_files, one_class = False, transform=None):
+    def __init__(self, error_files, correct_files, one_class = False, transform=None, layer_name=None):
 
 
         num_errors = 0
@@ -118,7 +127,7 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
         return self.dim_size
 
 class ImageNetTargetGroundInterMediateLayersInMemoryDataset(Dataset):
-    def __init__(self, error_files, correct_files, one_class = False, transform=None):
+    def __init__(self, error_files, correct_files, one_class = False, transform=None, layer_name=None):
 
 
         num_errors = 0
@@ -233,7 +242,7 @@ class ImageNetTargetGroundInterMediateLayersInMemoryDataset(Dataset):
         return self.dim_size
 
 class ImageNetTargetPredictInterMediateLayersInMemoryDataset(Dataset):
-    def __init__(self, error_files, correct_files, one_class = False, transform=None):
+    def __init__(self, error_files, correct_files, one_class = False, transform=None, layer_name=None):
 
 
         num_errors = 0

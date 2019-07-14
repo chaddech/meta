@@ -45,16 +45,6 @@ single_layer_incorrect_valid_file = '/home/seungwookhan/cifar10_intermediates/' 
 
 num_epochs = 50
 
-def process_layer_data(data):
-	processed_data = None
-
-	if 'conv' in LAYER_NAME:
-		processed_data = data.reshape(data.shape[0] * data.shape[1] * data.shape[2]).to(CUDA_DEVICE)
-	else:
-		processed_data = data.to(CUDA_DEVICE)
-	
-	return processed_data
-
 def train(model, device, train_loader, optimizer, epoch):
 	model.train()
 	correct = 0
@@ -164,9 +154,9 @@ def main():
 
 	empty_files = ()
 
-	train_dataset = ImageNetTargetGroundInterMediateLayersInMemoryDataset(train_error_files, train_correct_files)
-	valid_error_dataset = ImageNetTargetGroundInterMediateLayersInMemoryDataset(valid_error_files, empty_files, one_class='error' )
-	valid_correct_dataset = ImageNetTargetGroundInterMediateLayersInMemoryDataset(empty_files, valid_correct_files, one_class='correct' )
+	train_dataset = ImageNetTargetGroundInterMediateLayersInMemoryDataset(train_error_files, train_correct_files, layer_name=LAYER_NAME)
+	valid_error_dataset = ImageNetTargetGroundInterMediateLayersInMemoryDataset(valid_error_files, empty_files, one_class='error', layer_name=LAYER_NAME)
+	valid_correct_dataset = ImageNetTargetGroundInterMediateLayersInMemoryDataset(empty_files, valid_correct_files, one_class='correct', layer_name=LAYER_NAME)
 
 
 	#make weights for balancing training samples
