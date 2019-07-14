@@ -1,5 +1,6 @@
 import torch
 from torch.utils.data import Dataset
+from train_cifar10_meta_10_classifier import process_layer_data
 
 class ImageNetInterMediateLayersInMemoryDataset(Dataset):
     def __init__(self, error_files, correct_files, one_class = False, transform=None):
