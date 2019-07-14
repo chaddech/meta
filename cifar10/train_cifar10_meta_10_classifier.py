@@ -11,8 +11,8 @@ import sys
 from shutil import copyfile
 import datetime
 from tensorboard_logger import configure, log_value
-from cifar10_datasets import ImageNetInterMediateLayersInMemoryDataset
-from meta_models import Net, ConvNet
+from cifar10_datasets import ImageNetTargetGroundInterMediateLayersInMemoryDataset, ImageNetTargetPredictInterMediateLayersInMemoryDataset
+from meta_models import Net, Net10, ConvNet
 import IPython
 
 MODEL_NAME = sys.argv[1]
@@ -164,9 +164,9 @@ def main():
 
 	empty_files = ()
 
-	train_dataset = ImageNetInterMediateLayersInMemoryDataset(train_error_files, train_correct_files)
-	valid_error_dataset = ImageNetInterMediateLayersInMemoryDataset(valid_error_files, empty_files, one_class='error' )
-	valid_correct_dataset = ImageNetInterMediateLayersInMemoryDataset(empty_files, valid_correct_files, one_class='correct' )
+	train_dataset = ImageNetTargetGroundInterMediateLayersInMemoryDataset(train_error_files, train_correct_files)
+	valid_error_dataset = ImageNetTargetGroundInterMediateLayersInMemoryDataset(valid_error_files, empty_files, one_class='error' )
+	valid_correct_dataset = ImageNetTargetGroundInterMediateLayersInMemoryDataset(empty_files, valid_correct_files, one_class='correct' )
 
 
 	#make weights for balancing training samples
@@ -174,19 +174,18 @@ def main():
 	error_count = train_dataset.get_error_len()
 	total_count = correct_count + error_count
 
-	y_vals = train_dataset.get_y_data()
+	x_vals = train_dataset.get_x_data()
 
 	correct_weight = float(total_count)/correct_count
 	error_weight = float(total_count)/error_count
 
 	weights = np.zeros((total_count))
 
-	for i in range(len(y_vals)):
-		if y_vals[i] == 0:
+	for i in range(len(x_vals)):
+		if x_vals[i][2] != x_vals[i][3]:
 			weights[i] = error_weight
 		else:
 			weights[i] = correct_weight
-
 
 	
 	error_range = list(range(correct_count,total_count))
