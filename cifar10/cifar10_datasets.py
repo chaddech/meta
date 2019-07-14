@@ -101,7 +101,7 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
         else:
             self.incorrect_running_count += 1
 
-        return (Xs_to_return, self.y_data[idx]).long())
+        return (Xs_to_return, self.y_data[idx].long())
 
     def get_correct_len(self):
         return self.correct_len
@@ -217,7 +217,7 @@ class ImageNetTargetGroundInterMediateLayersInMemoryDataset(Dataset):
         else:
             self.incorrect_running_count += 1
 
-        return (Xs_to_return, self.y_data[idx]).long())
+        return (Xs_to_return, self.y_data[idx].long())
 
     def get_correct_len(self):
         return self.correct_len
@@ -333,7 +333,7 @@ class ImageNetTargetPredictInterMediateLayersInMemoryDataset(Dataset):
         else:
             self.incorrect_running_count += 1
 
-        return (Xs_to_return, self.y_data[idx]).long())
+        return (Xs_to_return, self.y_data[idx].long())
 
     def get_correct_len(self):
         return self.correct_len
