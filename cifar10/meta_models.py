@@ -62,7 +62,7 @@ class Net(nn.Module):
 class Net10(nn.Module):
 
 	def __init__(self, first_layer_size):
-		super(Net1, self).__init__()
+		super(Net10, self).__init__()
 		self.fc1 = nn.Linear(first_layer_size, 1024) #input dimension both output and fc layer output
 		self.bn1 = nn.BatchNorm1d(1024)
 
