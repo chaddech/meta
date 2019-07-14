@@ -25,6 +25,7 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
         self.num_filters = 0
         self.isConv = False
         self.dim_size = 0
+        self.layer_name = layer_name
 
         if not one_class:
             for i in range(len(correct_files)):
@@ -89,7 +90,7 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
 
         for layer in range(len(self.X_data)):
             data = self.X_data[layer][idx][0].float()
-            processed_data = process_layer_data(data)
+            processed_data = process_layer_data(data, self.layer_name)
             Xs_to_return.append(processed_data)
             
         #Xs_to_return = (Xs_to_return[0], Xs_to_return[1], Xs_to_return[2], Xs_to_return[3])
@@ -141,6 +142,7 @@ class ImageNetTargetGroundInterMediateLayersInMemoryDataset(Dataset):
         self.num_filters = 0
         self.isConv = False
         self.dim_size = 0
+        self.layer_name = layer_name
 
         if not one_class:
             for i in range(len(correct_files)):
@@ -204,7 +206,7 @@ class ImageNetTargetGroundInterMediateLayersInMemoryDataset(Dataset):
 
         for layer in range(len(self.X_data)):
             data = self.X_data[layer][idx][0].float()
-            processed_data = process_layer_data(data)
+            processed_data = process_layer_data(data, self.layer_name)
             Xs_to_return.append(processed_data)
             
         #Xs_to_return = (Xs_to_return[0], Xs_to_return[1], Xs_to_return[2], Xs_to_return[3])
@@ -256,6 +258,7 @@ class ImageNetTargetPredictInterMediateLayersInMemoryDataset(Dataset):
         self.num_filters = 0
         self.isConv = False
         self.dim_size = 0
+        self.layer_name = layer_name
 
         if not one_class:
             for i in range(len(correct_files)):
@@ -319,7 +322,7 @@ class ImageNetTargetPredictInterMediateLayersInMemoryDataset(Dataset):
 
         for layer in range(len(self.X_data)):
             data = self.X_data[layer][idx][0].float()
-            processed_data = process_layer_data(data)
+            processed_data = process_layer_data(data, self.layer_name)
             Xs_to_return.append(processed_data)
             
         #Xs_to_return = (Xs_to_return[0], Xs_to_return[1], Xs_to_return[2], Xs_to_return[3])
