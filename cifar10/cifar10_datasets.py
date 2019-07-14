@@ -110,7 +110,7 @@ class ImageNetInterMediateLayersInMemoryDataset(Dataset):
         return self.error_len
 
     def get_x_data(self):
-        return self.X_data
+        return self.X_data[0]
 
     def get_y_data(self):
         return self.y_data
@@ -225,8 +225,6 @@ class ImageNetTargetGroundInterMediateLayersInMemoryDataset(Dataset):
     def get_error_len(self):
         return self.error_len
 
-    def get_x_data(self):
-        return self.X_data[0]
         
     def get_y_data(self):
         return self.y_data
@@ -341,6 +339,9 @@ class ImageNetTargetPredictInterMediateLayersInMemoryDataset(Dataset):
     def get_error_len(self):
         return self.error_len
 
+    def get_x_data(self):
+        return self.X_data[0]
+        
     def get_y_data(self):
         return self.y_data
 
