@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 
 ### GLOBAL VAR
 #DIM_SIZE = 141200
-CORRECT = 'correct_'
-INCORRECT = 'incorrect_'
+CORRECT = 'correct'
+INCORRECT = 'incorrect'
 OUTPUT_NAME = 'sorted_outputs.torch'
 
 ### HOOKS
