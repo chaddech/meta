@@ -9,9 +9,9 @@ logger = logging.getLogger(__name__)
 
 ### GLOBAL VAR
 #DIM_SIZE = 141200
-LAYER = 'model_layer_outputs.torch'
 CORRECT = 'correct_'
 INCORRECT = 'incorrect_'
+OUTPUT_NAME = 'sorted_outputs.torch'
 
 ### HOOKS
 fc1_output = []
@@ -60,8 +60,8 @@ if __name__ == "__main__":
     # Creating dataset and loader
     correct_files = []
     incorrect_files = []
-    correct_files.append(args.val_filepath + CORRECT + LAYER)
-    incorrect_files.append(args.val_filepath + INCORRECT + LAYER)
+    correct_files.append(os.path.join(args.val_filepath, CORRECT, OUTPUT_NAME))
+    incorrect_files.append(os.path.join(args.val_filepath, INCORRECT, OUTPUT_NAME))
 
     dataset = ImageNetInterMediateLayersInMemoryDataset(correct_files=correct_files, error_files=incorrect_files)
     dataset_loader = torch.utils.data.DataLoader(dataset, args.batch_size, shuffle=False)
